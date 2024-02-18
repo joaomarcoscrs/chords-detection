@@ -1,0 +1,20 @@
+.win {
+  border-color: green;
+}
+.draw {
+  border-color: yellow;
+}
+.fail {
+  border-color: orange;
+}
+
+.player {
+  width: 400px;
+  height: 300px;
+}
+#webcam {
+  border: 1px solid black;
+}
+#other {
+  border: 1px solid black;
+}

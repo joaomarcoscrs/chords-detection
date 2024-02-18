@@ -1,0 +1,52 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>rock paper scissor</title>
+
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.roboflow.com/0.2.26/roboflow.js"></script>
+  <script src="./robot.js"></script>
+  <link href="style.css" rel="stylesheet" />
+</head>
+<body>
+  <div id="app" class="max-w-md mx-auto">
+    <div class="grid grid-cols-4 gap-4">
+        <video ref="videoElement" class="player" autoplay></video>
+        <div id="other" class="player flex">
+          <div v-if="state == 'countdown'" class="m-auto">
+            {{ count }}
+          </div>
+          <div v-else @click="startCountdown()" class="m-auto cursor-pointer">
+            PLAY!
+          </div>
+      </div>
+    </div>
+    <div v-for="result in results" class="grid grid-cols-4 gap-4">
+      <div class="grid grid-cols-1 text-center">
+        <div>
+        <img
+          :class="resultClasses(result.result, 'me')"
+          :src="result.snapshot"
+        />
+        </div>
+        <div class="text-xs text-gray-800">{{ result.me }}</div>
+      </div>
+      <div class="grid grid-cols-1 text-center">
+        <div>
+        <img
+          :class="resultClasses(result.result, 'other')"
+          :src="'images/' + result.other.toLowerCase() + '.jpg'"
+        />
+        </div>
+        <div class="text-xs text-gray-800">{{ result.other }}</div>
+      </div>
+    </div>
+    <canvas ref="canvasElement" class="hidden"></canvas>
+  </div>
+
+  <script type="module" src="app.js">
+  </script>
+</body>
+</html>
