@@ -13,6 +13,8 @@ jobs:
       - name: Build
         run: |
           mkdir _site/
+          pwd
+          ls
           cp -R rock-paper-scissors/* _site/
           sed -i "s/%PUBLISHABLE_KEY%/$ROBOFLOW_PUBLISHABLE_KEY/g" _site/robot.js
       - name: Upload Pages artifact
