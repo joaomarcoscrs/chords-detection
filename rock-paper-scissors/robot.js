@@ -1,5 +1,11 @@
 const publishable_key = '%PUBLISHABLE_KEY%'
 
+const translation = {
+  'papel': 'paper',
+  'piedra': 'rock',
+  'tijera': 'scissors',
+}
+
 const availableModels = [
   {
     model: 'paperrockscissorsv3',
@@ -8,31 +14,33 @@ const availableModels = [
   {
     model: 'piedra-papel-o-tijeras',
     version: '6',
-    resultMap: {
-      'papel': 'paper',
-      'piedra': 'rock',
-      'tijera': 'scissors',
-    }
   },
 ]
 
-async function getModel() {
+async function getModel(modelConfig) {
   var model = await roboflow
   .auth({publishable_key})
-  .load(availableModels[0]);
+  .load(modelConfig);
 
   return model.configure({
-    threshold: 0.3,
+    threshold: 0.4,
     max_objects: 1,
   });
 }
 
-var initialized_model = getModel();
+var initialized_models = [
+  getModel(availableModels[0]),
+  // getModel(availableModels[1]),
+]
 
-function detect(imageElement) {
-  return initialized_model.then(function (model) {
+function detect(imageElement, model_index = 0) {
+  return initialized_models[model_index].then(function (model) {
     return model.detect(imageElement).then(function (predictions) {
       console.log("Predictions", predictions)
+      predictions.forEach(prediction => {
+        const classLowerCase = prediction.class.toLowerCase()
+        prediction.class = translation[classLowerCase] || classLowerCase
+      })
       return predictions
     });
   });

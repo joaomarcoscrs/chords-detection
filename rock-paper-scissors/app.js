@@ -6,8 +6,13 @@ const choices = {
 const outcomes = {
   me: "me",
   other: "other",
-  draw: "draw",
-  fail: "fail",
+  tie: "tie",
+  unknown: "unknown",
+}
+const winMap = {
+  rock: choices.scissors,
+  scissors: choices.paper,
+  paper: choices.rock,
 }
 
 function randomChoice(choices) {
@@ -16,20 +21,22 @@ function randomChoice(choices) {
   return keys[index]
 }
 
-let stream;
-
 async function startWebcam(videoElement) {
   try {
-    stream = await navigator.mediaDevices.getUserMedia({ video: true });
-    videoElement.srcObject = stream;
+    videoElement.srcObject = await navigator.mediaDevices.getUserMedia({
+      audio: false,
+      video: {
+        facingMode: 'environment',
+      }
+    });
   } catch (error) {
     console.error('Error accessing webcam:', error);
   }
 }
 
 var snapshot = function(videoElement, canvasElement) {
-  canvasElement.width = 400;
-  canvasElement.height = 300;
+  canvasElement.width = videoElement.videoWidth;
+  canvasElement.height = videoElement.videoHeight;
   var ctx = canvasElement.getContext('2d');
   ctx.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
   return canvasElement;
@@ -37,84 +44,73 @@ var snapshot = function(videoElement, canvasElement) {
 
 function winner(me, other) {
   if (!choices[me]) {
-    return outcomes.fail
+    return outcomes.unknown
   }
   if (me == other) {
-    return outcomes.draw
+    return outcomes.tie
   }
-  if (me == choices.rock && other == choices.paper) {
-    return outcomes.other
+  return winMap[me] == other ? outcomes.me : outcomes.other
+}
+
+function resultClass(result, player) {
+  if (result == outcomes.unknown) {
+    return 'border-orange-400'
   }
-  if (me == choices.rock && other == choices.scissors) {
-    return outcomes.me
+  if (result == outcomes.tie) {
+    return 'border-gray-400'
   }
-  if (me == choices.paper && other == choices.rock) {
-    return outcomes.me
+  return result == player ? 'border-green-400' : 'border-red-400'
+}
+
+function resultMessage(winner) {
+  if (winner == outcomes.unknown) {
+    return "unknown"
   }
-  if (me == choices.paper && other == choices.scissors) {
-    return outcomes.other
+  if (winner == outcomes.tie) {
+    return "tie"
   }
-  if (me == choices.scissors && other == choices.rock) {
-    return outcomes.other
+  if (winner == outcomes.me) {
+    return "you won"
   }
-  if (me == choices.scissors && other == choices.paper) {
-    return outcomes.me
+  else {
+    return "you lose"
   }
 }
 
-function resultClasses(result, player) {
-  var resultClass = (
-    ['fail', 'draw'].includes(result) ? result : result == player ? 'win' : 'lose'
-  )
-  return [
-    resultClass, 'border-2', 'border-solid'
-  ]
-}
-
-const { createApp, ref } = Vue
+const { createApp, computed, ref } = Vue
 
 createApp({
   setup() {
     const results = ref([])
-    const count = ref(0)
-    const state = ref('waiting')
 
-    function startCountdown() {
-      this.state = 'countdown'
-      this.count = 1
-      const interval = setInterval(() => {
-        this.count--
-        if (this.count == 0) {
-          clearInterval(interval)
-          play(this.$refs.videoElement, this.$refs.canvasElement)
-        }
-      }, 1000)
-    }
-
-    function play(videoElement, canvasElement) {
+    function play() {
+      const {videoElement, canvasElement} = this.$refs
       const _snapshot = snapshot(videoElement, canvasElement)
-      state.value = "done"
 
       detect(_snapshot).then((predictions) => {
-        const me = predictions.length > 0 && predictions[0].class || null
+        const me = predictions.length > 0 && predictions[0].class || 'unknown'
         const other = randomChoice(choices)
+        const _winner = winner(me, other)
         results.value.unshift({
           me,
           other,
-          result: winner(me, other),
+          result: _winner,
           snapshot: _snapshot.toDataURL('image/jpg'),
+          predictions: predictions,
+          message: resultMessage(_winner)
         })
       })
     }
 
     return {
-      count,
       play,
       results,
-      resultClasses,
-      state,
-      startCountdown,
+      resultClass,
+      resultMessage,
       startWebcam,
+      debugMessage (message) {
+        alert(JSON.stringify(message, null, 2))
+      },
     }
   },
   mounted() {

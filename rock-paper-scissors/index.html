@@ -6,47 +6,52 @@
 
   <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.roboflow.com/0.2.26/roboflow.js"></script>
-  <script src="./robot.js"></script>
-  <link href="style.css" rel="stylesheet" />
+  <link href="./style.css" rel="stylesheet" />
 </head>
-<body>
-  <div id="app" class="max-w-md mx-auto">
-    <div class="grid grid-cols-4 gap-4">
-        <video ref="videoElement" class="player" autoplay></video>
-        <div id="other" class="player flex">
-          <div v-if="state == 'countdown'" class="m-auto">
-            {{ count }}
-          </div>
-          <div v-else @click="startCountdown()" class="m-auto cursor-pointer">
-            PLAY!
-          </div>
-      </div>
-    </div>
-    <div v-for="result in results" class="grid grid-cols-4 gap-4">
-      <div class="grid grid-cols-1 text-center">
-        <div>
-        <img
-          :class="resultClasses(result.result, 'me')"
-          :src="result.snapshot"
-        />
-        </div>
-        <div class="text-xs text-gray-800">{{ result.me }}</div>
-      </div>
-      <div class="grid grid-cols-1 text-center">
-        <div>
-        <img
-          :class="resultClasses(result.result, 'other')"
-          :src="'images/' + result.other.toLowerCase() + '.jpg'"
-        />
-        </div>
-        <div class="text-xs text-gray-800">{{ result.other }}</div>
-      </div>
-    </div>
-    <canvas ref="canvasElement" class="hidden"></canvas>
+<body id="app">
+<nav class="sticky top-0 bg-gray-100">
+  <h1 class="m-2 text-4xl font-extrabold leading-none tracking-tight text-gray-900">
+    <span class="flex inline">
+      <img src="images/favicon.png" width="32" class="m-2" />
+      rock paper scissors
+    </span>
+  </h1>
+</nav>
+<div class="max-w-sm rounded overflow-hidden shadow-lg mx-auto">
+  <video ref="videoElement" class="player flex" autoplay></video>
+  <div class="px-2 py-2">
+    <button @click="play()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded w-full">
+      PLAY
+    </button>
   </div>
+</div>
+<div
+  v-for="result in results"
+  class="max-w-sm rounded overflow-hidden shadow-lg mx-auto my-2 border-solid border-b-4"
+  :class="resultClass(result.result, 'me')"
+>
+  <div class="grid grid-cols-2 gap-4 m-2">
+    <div class="grid grid-cols-1 text-center">
+      <div class="text-xs text-gray-800">{{ result.me }}</div>
+      <div>
+      <img :src="result.snapshot" />
+      </div>
+    </div>
+    <div class="grid grid-cols-1 text-center">
+      <div class="text-xs text-gray-800">{{ result.other }}</div>
+      <div>
+      <img :src="'images/' + result.other.toLowerCase() + '.jpg'" />
+      </div>
+    </div>
+  </div>
+  <div class="pb-2 mx-full text-center uppercase font-medium" @click="debugMessage(result.predictions)">
+    {{ result.message }}
+  </div>
+</div>
+<canvas ref="canvasElement" class="hidden"></canvas>
 
-  <script type="module" src="app.js">
-  </script>
+<script src="https://cdn.roboflow.com/0.2.26/roboflow.js"></script>
+<script src="./robot.js"></script>
+<script type="module" src="app.js"></script>
 </body>
 </html>
