@@ -10,7 +10,7 @@ const availableModels = [
   {
     model: 'rock-paper-scissors-sxsw',
     version: '11',
-  }
+  },
   {
     model: 'paperrockscissorsv3',
     version: '3',
