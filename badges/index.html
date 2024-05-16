@@ -1,0 +1,69 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>:badge-roboflow-project:</title>
+
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body id="app">
+<nav class="sticky top-0 bg-gray-100">
+  <h1 class="m-2 text-4xl font-extrabold leading-none tracking-tight text-gray-900">
+    <span class="flex inline">
+      <img src="https://emoji.slack-edge.com/TL2EBRS03/badge-roboflow-project/511855348829a74b.png" class="w-10 h-10" />
+      Roboflow badges
+    </span>
+  </h1>
+</nav>
+<div class="max-w-xl rounded overflow-hidden shadow-lg mx-auto">
+  <canvas ref="videoCanvas" width="640" height="480" class="player flex"></canvas>
+</div>
+
+<template v-if="selectedBadges.length > 0">
+  Your badges:
+  <button
+    v-on:click="copyToClipboard"
+    class="px-1 py-1 rounded bg-purple-500/100"
+  >
+      COPY
+  </button>
+  and paste your badges
+  <a
+      href="https://docs.google.com/spreadsheets/d/1KBOGN6oEdw5XBxcMZAjdA7pPgZI1JS1FT-CvBxlkcGo/edit#gid=0"
+      class="px-1 py-1 rounded bg-purple-500/100"
+      target="_blank"
+  >
+      HERE
+  </a>
+  <div v-for="badge in selectedBadges">
+      {{ badge.name }}
+  </div>
+</template>
+<template v-else>
+  Infer your badges with Roboflow or select them manually below
+</template>
+<div id="badges" class="grid lg:grid-cols-3">
+  <div
+      v-for="badge in allBadges"
+      :key="badge.id"
+      @click="toggleBadge(badge)"
+      class="flex border-4 border-gray-400 rounded m-2"
+      :class="classesFor(badge)">
+      <img :src="badge.url" class="h-32 w-32 m-1" />
+      <div class="p-2 pb-1 flex flex-col justify-between leading-normal">
+          <div>
+          <div class="text-gray-900 font-bold text-xl mb-2">{{ badge.name }}</div>
+          <p class="text-gray-700 text-base">{{ badge.description }}</p>
+          </div>
+      </div>
+  </div>
+</div>    
+
+<canvas ref="canvasElement" class="hidden"></canvas>
+<script src="https://cdn.roboflow.com/0.2.26/roboflow.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/public-google-sheets-parser@latest"></script>
+<script src="./robot.js"></script>
+<script type="module" src="app.js"></script>
+</body>
+</html>
