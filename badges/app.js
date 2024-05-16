@@ -16,10 +16,9 @@ const color_choices = [
   "#CCCCCC",
 ];
 
-async function startWebcam(videoCanvas) {
-  let webcamStream
+async function startWebcam() {
   try {
-    webcamStream = await navigator.mediaDevices.getUserMedia({
+    return await navigator.mediaDevices.getUserMedia({
       audio: false,
       video: {
         facingMode: 'environment',
@@ -29,35 +28,6 @@ async function startWebcam(videoCanvas) {
     console.error('Error accessing webcam:', error);
     throw error;
   }
-
-  const videoElement = setupVideo(webcamStream);
-
-  var ctx = videoCanvas.getContext("2d");
-
-  videoElement.addEventListener(
-    "loadeddata",
-    function () {
-      var loopID = setInterval(async function () {
-        const predictions = await detect(videoElement)
-        ctx.drawImage(videoElement, 0, 0, width, height, 0, 0, width, height);
-          ctx.beginPath();
-          drawBoundingBoxes(predictions, videoCanvas, ctx, scalingRatio, sx, sy);
-        // var [sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight, scalingRatio] =
-          // getCoordinates(video);
-          // model.then(function (model) {
-          // model.detect(video).then(function (predictions) {
-          //     ctx.drawImage(video, 0, 0, width, height, 0, 0, width, height);
-
-          //     ctx.beginPath();
-
-          //     drawBoundingBoxes(predictions, canvas, ctx, scalingRatio, sx, sy);
-      
-          //     if (!webcamLoop) {
-          //         clearInterval(loopID);
-          //     }
-          // });
-      }, 1000 / 30);
-    })
 }
 
 function setupVideo(stream) {
@@ -73,7 +43,22 @@ function setupVideo(stream) {
   return video
 }
 
-function drawBoundingBoxes(predictions, canvas, ctx, scalingRatio, sx, sy) {
+function setupVideoListener(canvasCtx, videoStream, predictionCallback) {
+  const videoElement = setupVideo(videoStream);
+  videoElement.addEventListener(
+    "loadeddata",
+    function () {
+      setInterval(async function () {
+        const predictions = await detect(videoElement)
+        canvasCtx.drawImage(videoElement, 0, 0, width, height, 0, 0, width, height);
+        canvasCtx.beginPath();
+        drawBoundingBoxes(predictions, canvasCtx, scalingRatio, sx, sy);
+        predictions.forEach(prediction => predictionCallback(prediction))
+      }, 1000 / 30);
+    })
+}
+
+function drawBoundingBoxes(predictions, ctx, scalingRatio, sx, sy) {
   for (var i = 0; i < predictions.length; i++) {
     var confidence = predictions[i].confidence;
     ctx.scale(1, 1);
@@ -188,11 +173,18 @@ createApp({
       selectedBadges,
       debugMessage,
       startWebcam,
+      setupVideoListener,
       classesFor(badge) {
         const selected = selectedBadges.value.indexOf(badge) !== -1;
         return {
             'border-purple-800': selected,
             'bg-purple-300': selected,
+        }
+      },
+      selectBadge(badge) {
+        const badgeIndex = selectedBadges.value.indexOf(badge);
+        if (badgeIndex === -1) {
+            selectedBadges.value.push(badge);
         }
       },
       toggleBadge(badge) {
@@ -204,9 +196,16 @@ createApp({
             selectedBadges.value.splice(badgeIndex, 1);
         }
       },
+      copyToClipboard() {
+        navigator.clipboard.writeText(selectedBadges.value.join("\n"));
+      },
     }
   },
-  mounted() {
-    this.startWebcam(this.$refs.videoCanvas)
+  async mounted() {
+    const webcamStream = await this.startWebcam()
+    var ctx = this.$refs.videoCanvas.getContext("2d");
+    this.setupVideoListener(ctx, webcamStream, (prediction) => {
+      this.selectBadge(`:${prediction.class}:`)
+    })
   }
 }).mount('#app')

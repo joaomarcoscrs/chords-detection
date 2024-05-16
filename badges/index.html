@@ -37,7 +37,7 @@
       HERE
   </a>
   <div v-for="badge in selectedBadges">
-      {{ badge.name }}
+      {{ badge }}
   </div>
 </template>
 <template v-else>
@@ -47,9 +47,9 @@
   <div
       v-for="badge in allBadges"
       :key="badge.id"
-      @click="toggleBadge(badge)"
+      @click="toggleBadge(badge.name)"
       class="flex border-4 border-gray-400 rounded m-2"
-      :class="classesFor(badge)">
+      :class="classesFor(badge.name)">
       <img :src="badge.url" class="h-32 w-32 m-1" />
       <div class="p-2 pb-1 flex flex-col justify-between leading-normal">
           <div>
