@@ -8,14 +8,14 @@
         <script src="https://cdn.tailwindcss.com"></script>
     </head>
     <body id="app" class="text-base text-gray-700">
-        <nav class="sticky top-0 bg-violet-50 border-b border-violet-200 z-50">
-            <button id="header" v-on:click="scrollToTop" class="text-3xl font-extrabold leading-none tracking-tight text-gray-900 px-5 py-4 flex gap-4 items-center text-left">
+        <nav class="sticky top-0 bg-violet-50 border-b border-violet-200 z-50 cursor-pointer" v-on:click="scrollToTop">
+            <div class="text-3xl font-extrabold leading-none tracking-tight text-gray-900 px-5 py-4 flex gap-4 items-center text-left">
                 <img src="https://emoji.slack-edge.com/TL2EBRS03/badge-roboflow-project/511855348829a74b.png" class="w-10 h-10" />
                 Roboflow Badges
-            </button>
+            </div>
         </nav>
 
-        <div class="flex flex-col sm gap-8 mt-10 mb-16 mx-8">
+        <div class="flex flex-col sm gap-8 mt-10 mb-12 mx-8">
             <div class="flex flex-col gap-2 text-gray-900 z-10 text-center">
                 <span class="font-bold text-3xl">Try inferring badges with your webcam</span>
                 <span class="opacity-70 text-base">Or, select your badges manually below.</span>
@@ -30,9 +30,12 @@
                         <div class="h-full flex flex-col overflow-y-scroll py-2 px-3 pr-4 gap-1 font-medium">
                             <div v-for="badge in selectedBadges">{{ badge }}</div>
                         </div>
-                        <div class="flex flex-col items-center text-center gap-1 p-2 border-t border-violet-300">
-                            <button id="copyBadges" v-on:click="copyToClipboard" class="w-full px-2 py-1 rounded-lg bg-violet-500 shadow hover:bg-violet-600 text-white transition duration-200">Copy badges</button>
-                            <a href="https://docs.google.com/spreadsheets/d/1KBOGN6oEdw5XBxcMZAjdA7pPgZI1JS1FT-CvBxlkcGo/edit#gid=0" class="w-full px-2 py-1 rounded-lg bg-white border border-gray-300 text-gray-700 shadow hover:bg-gray-50 hover:border-gray-400 hover:text-gray-900 transition duration-200" target="_blank">Paste here</a>
+                        <div class="flex flex-col text-center gap-1 p-2 border-t border-violet-300">
+                            <button id="copyBadges" v-on:click="copyToClipboard" class="px-2 py-1 rounded-lg bg-violet-500 shadow hover:bg-violet-600 text-white transition duration-200">Copy badges</button>
+                            <div class="flex gap-1">
+                                <button v-on:click="clearBadges" class="px-2 py-1 rounded-lg bg-white border border-gray-300 text-red-700 shadow hover:bg-red-50 hover:border-red-500 hover:text-red-500 transition duration-200" target="_blank">Clear</button>
+                                <a href="https://docs.google.com/spreadsheets/d/1KBOGN6oEdw5XBxcMZAjdA7pPgZI1JS1FT-CvBxlkcGo/edit#gid=0" class="flex-1 px-2 py-1 rounded-lg bg-white border border-gray-300 text-gray-700 shadow hover:bg-gray-50 hover:border-gray-400 hover:text-gray-900 transition duration-200" target="_blank">Paste here</a>
+                            </div>
                         </div>
                     </template>
 

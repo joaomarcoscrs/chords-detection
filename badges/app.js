@@ -180,6 +180,9 @@ createApp({
             scrollToTop() {
                 window.scrollTo({ top: 0, behavior: "smooth" });
             },
+            clearBadges() {
+                selectedBadges.value.splice(0, selectedBadges.value.length);
+            },
         };
     },
     async mounted() {
