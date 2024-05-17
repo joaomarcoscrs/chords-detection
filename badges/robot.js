@@ -3,7 +3,7 @@ const publishable_key = 'rf_Rwjz1tAdDeX2Je6rC13z0sK2EN43'
 const availableModels = [
   {
     model: 'roboflow-badges',
-    version: '1',
+    version: '2',
   },
 ]
 
@@ -13,7 +13,7 @@ async function getModel(modelConfig) {
   .load(modelConfig);
 
   return model.configure({
-    threshold: 0.6,
+    threshold: 0.65,
   });
 }
 
