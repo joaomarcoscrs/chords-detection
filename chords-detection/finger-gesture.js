@@ -1,4 +1,4 @@
-import { lineAngles } from "./utils/keypoints"
+import { lineAngles } from "./utils/keypoints.js"
 
 // Only the first and second fingers (index == 1 and middle == 2) are considered for barre chords.
 // There is a detail: the second finger can be used as a barre only when the first finger is also a barre.

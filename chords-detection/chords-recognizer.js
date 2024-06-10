@@ -1,7 +1,7 @@
-import { buildFretboardInfo } from "./guitar";
-import { buildHandInfo } from "./hand"
-import { notesBeingPlayed } from "./note-recognizer";
-import { getClassPrediction } from "./utils/predictions"
+import { buildFretboardInfo } from "./guitar.js";
+import { buildHandInfo } from "./hand.js"
+import { notesBeingPlayed } from "./note-recognizer.js";
+import { getClassPrediction } from "./utils/predictions.js"
 
 const NOTE_VALUE_MAPPING = {
   0: "C",
