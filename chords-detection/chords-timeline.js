@@ -68,7 +68,7 @@ function drawHorizontalLine(ctx, y) {
   ctx.stroke();
 }
 
-export function drawTimeline(canvasRef, elapsedTime, bpm) {
+export function drawTimeline(canvasRef, elapsedTime, bpm, chords) {
   const { canvas, ctx } = canvasInfo(canvasRef);
 
   canvas.width = window.innerWidth;
@@ -79,14 +79,12 @@ export function drawTimeline(canvasRef, elapsedTime, bpm) {
   const lineY = canvas.height / 2;
   const textY = lineY - 40;
 
-  // Simulação de um acorde obtido de previsões
-  const chord = 'C';
-
   drawHorizontalLine(ctx, lineY);
 
   for (let i = 1; i < ticks; i++) {
     const x = i * tickSpacing;
     drawTick(ctx, x, lineY);
+    const chord = chords[i];
     if (chord) drawChord(ctx, chord, x, textY);
   }
 }

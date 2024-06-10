@@ -1,18 +1,21 @@
 import { drawTimeline } from './chords-timeline.js';
 import { startWebcam, snapshot } from './webcam.js';
+import { identifyChord } from './chords-recognizer.js';
+import { playElementSound } from './sound.js';
 
 const { createApp, ref, onMounted } = Vue;
 
 createApp({
   setup() {
-    const results = ref([]);
-    const chords = ref([]);
-    const count = ref(0);
+    // Refs to elements on page
     const timelineElement = ref(null);
     const videoElement = ref(null);
     const canvasElement = ref(null);
     const clickSoundElement = ref(null);
     const bleepSoundElement = ref(null);
+    // Refs to data
+    const chords = ref([]);
+    const count = ref(0);
     const timerInterval = ref(null);
     const elapsedTime = ref(0);
     const isTimelineEmpty = ref(true);
@@ -22,7 +25,7 @@ createApp({
 
     function startCountdown() {
       count.value = 3;
-      playBleepSound();
+      playElementSound(bleepSoundElement.value);
 
       const countdownInterval = setInterval(() => {
         count.value--;
@@ -33,18 +36,6 @@ createApp({
           clearInterval(countdownInterval);
         }
       }, 1000);
-    }
-
-    function playBleepSound() {
-      if (!bleepSoundElement.value) return;
-
-      bleepSoundElement.value.play();
-    }
-
-    function playClickSound() {
-      if (!clickSoundElement.value) return;
-
-      clickSoundElement.value.play();
     }
 
     function handleDetectClick() {
@@ -63,9 +54,13 @@ createApp({
         if (!timelineElement.value) return;
         isTimelineEmpty.value = false;
 
-        const _snapshot = snapshot(videoElement.value, canvasElement.value)
-        drawTimeline(timelineElement.value, elapsedTime.value, bpm);
-        playClickSound();
+        const _snapshot = snapshot(videoElement.value, canvasElement.value);
+        detect(_snapshot).then((predictions) => {
+          chords.value.unshift(identifyChord(predictions))
+        })
+
+        drawTimeline(timelineElement.value, elapsedTime.value, bpm, chords.value);
+        playElementSound(clickSoundElement.value);
       }, interval);
     }
 
@@ -78,25 +73,6 @@ createApp({
       timerInterval.value = null;
       elapsedTime.value = 0;
       chords.value = [];
-    }
-
-    function play() {
-      const { videoElement, canvasElement } = this.$refs
-      const _snapshot = snapshot(videoElement, canvasElement)
-
-      detect(_snapshot).then((predictions) => {
-        const me = predictions.length > 0 && predictions[0].class || 'unknown'
-        const other = randomChoice(choices)
-        const _winner = winner(me, other)
-        results.value.unshift({
-          me,
-          other,
-          result: _winner,
-          snapshot: _snapshot.toDataURL('image/jpg'),
-          predictions: predictions,
-          message: resultMessage(_winner)
-        })
-      })
     }
 
     // Starts webcam on mounted
@@ -112,11 +88,9 @@ createApp({
       bleepSoundElement,
       count,
       chords,
-      results,
       timerInterval,
       elapsedTime,
       isTimelineEmpty,
-      play,
       handleDetectClick,
     }
   },
