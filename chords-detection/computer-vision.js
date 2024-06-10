@@ -1,8 +1,10 @@
 const publishableKey = '%PUBLISHABLE_KEY%'
 
 const MODEL = {
-  model: 'guitar-chords-daewp',
-  version: '1',
+  // model: 'guitar-chords-daewp',
+  // version: '1',
+  model: 'rock-paper-scissors-sxsw',
+  version: '11',
 }
 
 async function roboflowModel(modelConfig = MODEL) {
@@ -22,8 +24,6 @@ var initialized_models = [
 function detect(imageElement) {
   return roboflowModel().then(function (model) {
     return model.detect(imageElement).then(function (predictions) {
-      console.log("predictions", predictions)
-
       return predictions
     });
   });

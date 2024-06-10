@@ -54,13 +54,15 @@ createApp({
         if (!timelineElement.value) return;
         isTimelineEmpty.value = false;
 
-        const _snapshot = snapshot(videoElement.value, canvasElement.value);
-        detect(_snapshot).then((predictions) => {
+        const predictionsPromise = detect(snapshot(videoElement.value, canvasElement.value));
+
+        playElementSound(clickSoundElement.value);
+
+        predictionsPromise.then((predictions) => {
           chords.value.unshift(identifyChord(predictions))
-        })
+        });
 
         drawTimeline(timelineElement.value, elapsedTime.value, bpm, chords.value);
-        playElementSound(clickSoundElement.value);
       }, interval);
     }
 
