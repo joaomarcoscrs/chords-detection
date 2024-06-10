@@ -14,8 +14,6 @@ function drawTick(ctx, x, y) {
 
 function chordGradient(ctx, x, y) {
   const gradient = ctx.createLinearGradient(x, y - 20, x + 20, y + 20);
-  // gradient.addColorStop(0, '#792FCC');
-  // gradient.addColorStop(1, '#9B57ED');
   gradient.addColorStop(0, '#1F1F1F');
   gradient.addColorStop(1, '#1c1c1c');
 
@@ -36,26 +34,6 @@ function drawChordBackgroundShape(ctx, x, y) {
 
   ctx.fill();
 }
-
-// function drawChordBackgroundShape(ctx, x, y) {
-//   const squareSize = 40;
-//   const borderRadius = 8;
-
-//   ctx.beginPath();
-//   ctx.moveTo(x - squareSize / 2 + borderRadius, y - squareSize / 2); // Canto superior esquerdo
-//   ctx.arcTo(x + squareSize / 2, y - squareSize / 2, x + squareSize / 2, y - squareSize / 2 + borderRadius, borderRadius); // Linha reta para o canto superior direito e borda superior
-//   ctx.arcTo(x + squareSize / 2, y + squareSize / 2, x + squareSize / 2 - borderRadius, y + squareSize / 2, borderRadius); // Linha reta para o canto inferior direito e borda direita
-//   ctx.arcTo(x - squareSize / 2, y + squareSize / 2, x - squareSize / 2, y + squareSize / 2 - borderRadius, borderRadius); // Linha reta para o canto inferior esquerdo e borda inferior
-//   ctx.arcTo(x - squareSize / 2, y - squareSize / 2, x - squareSize / 2 + borderRadius, y - squareSize / 2, borderRadius); // Linha reta para o canto superior esquerdo e borda esquerda
-//   ctx.closePath();
-
-//   ctx.shadowColor = '#00000033';
-//   ctx.shadowBlur = 2;
-//   ctx.shadowOffsetX = 1;
-//   ctx.shadowOffsetY = 1;
-
-//   ctx.fill();
-// }
 
 function drawChordText(ctx, chord, x, y) {
   ctx.shadowColor = 'transparent';
