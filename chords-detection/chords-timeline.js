@@ -2,33 +2,49 @@ function canvasInfo(canvasRef) {
   return {
     canvas: canvasRef,
     ctx: canvasRef.getContext('2d'),
-  }
+  };
+}
+
+function drawTick(ctx, x, y) {
+  ctx.beginPath();
+  ctx.moveTo(x, y - 10);
+  ctx.lineTo(x, y + 10);
+  ctx.stroke();
+}
+
+function drawChord(ctx, chord, x, y) {
+  ctx.font = '100 36px sans-serif';
+  ctx.fillStyle = '#6D28D9';
+  ctx.textAlign = 'center';
+  ctx.fillText(chord, x, y);
+}
+
+function drawHorizontalLine(ctx, y) {
+  ctx.beginPath();
+  ctx.moveTo(0, y);
+  ctx.lineTo(ctx.canvas.width, y);
+  ctx.stroke();
 }
 
 export function drawTimeline(canvasRef, elapsedTime, bpm) {
   const { canvas, ctx } = canvasInfo(canvasRef);
 
   canvas.width = window.innerWidth;
-  canvas.height = 200; // Define a altura da timeline
+  canvas.height = 200;
 
   const ticks = elapsedTime * (bpm / 60);
   const tickSpacing = canvas.width / ticks;
-  const lineY = canvas.height / 2; // Define a posição Y da linha de chão
+  const lineY = canvas.height / 2;
+  const textY = lineY - 30;
 
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  // Get chord from roboflow predictions
+  const chord = 'C';
 
-  // Desenha a linha de chão horizontal contínua
-  ctx.beginPath();
-  ctx.moveTo(0, lineY);
-  ctx.lineTo(canvas.width, lineY);
-  ctx.stroke();
+  drawHorizontalLine(ctx, lineY);
 
-  // Desenha os traços verticais em cada intervalo
-  for (let i = 0; i <= ticks; i++) {
+  for (let i = 1; i < ticks; i++) {
     const x = i * tickSpacing;
-    ctx.beginPath();
-    ctx.moveTo(x, lineY - 10); // Define a posição Y do traço vertical
-    ctx.lineTo(x, lineY + 10); // Define a posição Y do traço vertical
-    ctx.stroke();
+    drawTick(ctx, x, lineY);
+    if (chord) drawChord(ctx, chord, x, textY);
   }
 }

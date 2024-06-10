@@ -62,9 +62,7 @@ createApp({
 
       timerInterval.value = setInterval(() => {
         elapsedTime.value++;
-        if (!timelineCanvas.value) {
-          console.log('Timeline canvas not ready yet');
-        }
+        if (!timelineCanvas.value) return;
         isTimelineEmpty.value = false;
         drawTimeline(timelineCanvas.value, elapsedTime.value, bpm);
       }, interval);
