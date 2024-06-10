@@ -12,7 +12,6 @@ async function roboflowModel(modelConfig = MODEL) {
 
   return model.configure({
     threshold: 0.4,
-    max_objects: 1,
   });
 }
 
