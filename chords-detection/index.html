@@ -38,7 +38,7 @@
             'disabled:bg-slate-50 cursor-not-allowed': !timelineCanvas
           }"
         >
-          {{ timerInterval ? 'stop' : 'start' }}
+          {{ timerInterval ? 'stop' : `${isTimelineEmpty ? '' : 're'}start` }}
         </button>
       </div>
     </div>

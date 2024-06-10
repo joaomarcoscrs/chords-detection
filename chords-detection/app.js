@@ -44,6 +44,7 @@ createApp({
     const timelineCanvas = ref(null);
     const timerInterval = ref(null);
     const elapsedTime = ref(0);
+    const isTimelineEmpty = ref(true);
 
     const bpm = 60; // Beats per minute
     const interval = 1000 / (bpm / 60); // Interval between each beat in milliseconds
@@ -64,6 +65,7 @@ createApp({
         if (!timelineCanvas.value) {
           console.log('Timeline canvas not ready yet');
         }
+        isTimelineEmpty.value = false;
         drawTimeline(timelineCanvas.value, elapsedTime.value, bpm);
       }, interval);
     }
@@ -102,6 +104,7 @@ createApp({
       results,
       timerInterval,
       elapsedTime,
+      isTimelineEmpty,
       play,
       handleDetectClick,
       resultClass,
