@@ -1,8 +1,8 @@
 const publishableKey = '%PUBLISHABLE_KEY%'
 
 const MODEL = {
-  model: 'rock-paper-scissors-sxsw',
-  version: '11',
+  model: 'guitar-chords-daewp',
+  version: '1',
 }
 
 async function roboflowModel(modelConfig = MODEL) {
