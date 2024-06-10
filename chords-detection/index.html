@@ -12,8 +12,8 @@
     />
     <link href="./style.css" rel="stylesheet" />
   </head>
-  <body id="app">
-    <nav class="sticky top-0 bg-gray-100">
+  <body id="app" class="bg-gray-700 m-0 p-0">
+    <nav class="sticky top-0 bg-white">
       <h1
         class="m-2 text-4xl font-extrabold leading-none tracking-tight text-gray-900"
       >
@@ -23,9 +23,11 @@
         </span>
       </h1>
     </nav>
-    <div class="max-w-sm rounded overflow-hidden shadow-lg mx-auto">
+    <div
+      class="max-w-sm rounded-lg overflow-hidden shadow-lg mx-auto bg-gray-800"
+    >
       <video ref="videoElement" class="player flex" autoplay></video>
-      <div class="px-2 py-2 flex">
+      <div class="p-6 flex">
         <button
           @click="play()"
           class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded w-full"

@@ -6,6 +6,7 @@ function canvasInfo(canvasRef) {
 }
 
 function drawTick(ctx, x, y) {
+  ctx.strokeStyle = '#FFFFFF';
   ctx.beginPath();
   ctx.moveTo(x, y - 10);
   ctx.lineTo(x, y + 10);
@@ -14,8 +15,8 @@ function drawTick(ctx, x, y) {
 
 function chordGradient(ctx, x, y) {
   const gradient = ctx.createLinearGradient(x, y - 20, x + 20, y + 20);
-  gradient.addColorStop(0, '#1F1F1F');
-  gradient.addColorStop(1, '#1c1c1c');
+  gradient.addColorStop(0, '#FFFFFF');
+  gradient.addColorStop(1, '#F9F9F9');
 
   return gradient;
 }
@@ -36,16 +37,17 @@ function drawChordBackgroundShape(ctx, x, y) {
 }
 
 function drawChordText(ctx, chord, x, y) {
+  const fontSize = 30;
   ctx.shadowColor = 'transparent';
   ctx.shadowBlur = 0;
   ctx.shadowOffsetX = 0;
   ctx.shadowOffsetY = 0;
 
-  ctx.font = '100 24px sans-serif';
-  ctx.fillStyle = '#FFFFFF';
+  ctx.font = `bold ${fontSize}px Arial`;
+  ctx.fillStyle = '#394150';
   ctx.textAlign = 'center';
 
-  ctx.fillText(chord, x, y + 8);
+  ctx.fillText(chord, x, y + 10);
 }
 
 function drawChord(ctx, chord, x, y) {
@@ -59,6 +61,7 @@ function drawChord(ctx, chord, x, y) {
 }
 
 function drawHorizontalLine(ctx, y) {
+  ctx.strokeStyle = '#FFFFFF';
   ctx.beginPath();
   ctx.moveTo(0, y);
   ctx.lineTo(ctx.canvas.width, y);
