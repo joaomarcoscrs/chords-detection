@@ -1,47 +1,14 @@
 import { drawTimeline } from './chords-timeline.js';
 import { startWebcam, snapshot } from './webcam.js';
 
-function winner(me, other) {
-  if (!choices[me]) {
-    return outcomes.unknown
-  }
-  if (me == other) {
-    return outcomes.tie
-  }
-  return winMap[me] == other ? outcomes.me : outcomes.other
-}
-
-function resultClass(result, player) {
-  if (result == outcomes.unknown) {
-    return 'border-orange-400'
-  }
-  if (result == outcomes.tie) {
-    return 'border-gray-400'
-  }
-  return result == player ? 'border-green-400' : 'border-red-400'
-}
-
-function resultMessage(winner) {
-  if (winner == outcomes.unknown) {
-    return "unknown"
-  }
-  if (winner == outcomes.tie) {
-    return "tie"
-  }
-  if (winner == outcomes.me) {
-    return "you won"
-  }
-  else {
-    return "you lose"
-  }
-}
-
-const { createApp, ref } = Vue
+const { createApp, ref, onMounted } = Vue;
 
 createApp({
   setup() {
     const results = ref([])
-    const timelineCanvas = ref(null);
+    const timelineElement = ref(null);
+    const videoElement = ref(null);
+    const canvasElement = ref(null);
     const timerInterval = ref(null);
     const elapsedTime = ref(0);
     const isTimelineEmpty = ref(true);
@@ -62,9 +29,11 @@ createApp({
 
       timerInterval.value = setInterval(() => {
         elapsedTime.value++;
-        if (!timelineCanvas.value) return;
+        if (!timelineElement.value) return;
         isTimelineEmpty.value = false;
-        drawTimeline(timelineCanvas.value, elapsedTime.value, bpm);
+
+        const _snapshot = snapshot(videoElement.value, canvasElement.value)
+        drawTimeline(timelineElement.value, elapsedTime.value, bpm);
       }, interval);
     }
 
@@ -97,23 +66,21 @@ createApp({
       })
     }
 
+    // Starts webcam on mounted
+    onMounted(() => {
+      startWebcam(videoElement.value)
+    })
+
     return {
-      timelineCanvas,
+      timelineElement,
+      videoElement,
+      canvasElement,
       results,
       timerInterval,
       elapsedTime,
       isTimelineEmpty,
       play,
       handleDetectClick,
-      resultClass,
-      resultMessage,
-      startWebcam,
-      debugMessage(message) {
-        alert(JSON.stringify(message, null, 2))
-      },
     }
   },
-  mounted() {
-    this.startWebcam(this.$refs.videoElement)
-  }
 }).mount('#app')

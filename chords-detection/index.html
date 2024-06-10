@@ -36,13 +36,13 @@
           PLAY
         </button>
         <button
-          :disabled="!timelineCanvas"
+          :disabled="!timelineElement"
           @click="handleDetectClick()"
           class="font-thin pl-3 pr-4 rounded-full transition-colors duration-300 text-white bg-gradient-to-r shadow-md"
           :class="{
             'from-red-500 to-red-700 hover:from-red-700 hover:to-red-900': timerInterval,
             'from-purple-500 to-purple-700 hover:from-purple-700 hover:to-purple-900': !timerInterval,
-            'disabled:bg-slate-50 cursor-not-allowed': !timelineCanvas
+            'disabled:bg-slate-50 cursor-not-allowed': !timelineElement
           }"
         >
           <div class="flex w-full justify-center items-center">
@@ -58,7 +58,7 @@
       </div>
     </div>
     <canvas ref="canvasElement" class="hidden"></canvas>
-    <canvas ref="timelineCanvas"></canvas>
+    <canvas ref="timelineElement"></canvas>
 
     <script src="https://cdn.roboflow.com/0.2.26/roboflow.js"></script>
     <script src="./computer-vision.js"></script>

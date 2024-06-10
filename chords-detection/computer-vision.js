@@ -7,7 +7,7 @@ const MODEL = {
 
 async function roboflowModel(modelConfig = MODEL) {
   var model = await roboflow
-    .auth({ publishableKey })
+    .auth({ publishable_key: publishableKey })
     .load(modelConfig);
 
   return model.configure({
