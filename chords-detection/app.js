@@ -5,18 +5,41 @@ const { createApp, ref, onMounted } = Vue;
 
 createApp({
   setup() {
-    const results = ref([])
-    const chords = ref([])
+    const results = ref([]);
+    const chords = ref([]);
+    const count = ref(0);
     const timelineElement = ref(null);
     const videoElement = ref(null);
     const canvasElement = ref(null);
     const clickSoundElement = ref(null);
+    const bleepSoundElement = ref(null);
     const timerInterval = ref(null);
     const elapsedTime = ref(0);
     const isTimelineEmpty = ref(true);
 
     const bpm = 60; // Beats per minute
     const interval = 1000 / (bpm / 60); // Interval between each beat in milliseconds
+
+    function startCountdown() {
+      count.value = 3;
+      playBleepSound();
+
+      const countdownInterval = setInterval(() => {
+        count.value--;
+        if (count.value === 1) {
+          startDetection();
+        }
+        if (count.value === 0) {
+          clearInterval(countdownInterval);
+        }
+      }, 1000);
+    }
+
+    function playBleepSound() {
+      if (!bleepSoundElement.value) return;
+
+      bleepSoundElement.value.play();
+    }
 
     function playClickSound() {
       if (!clickSoundElement.value) return;
@@ -28,7 +51,7 @@ createApp({
       if (timerInterval.value) {
         stopDetection();
       } else {
-        startDetection();
+        startCountdown();
       }
     }
 
@@ -54,6 +77,7 @@ createApp({
 
       timerInterval.value = null;
       elapsedTime.value = 0;
+      chords.value = [];
     }
 
     function play() {
@@ -85,6 +109,9 @@ createApp({
       videoElement,
       canvasElement,
       clickSoundElement,
+      bleepSoundElement,
+      count,
+      chords,
       results,
       timerInterval,
       elapsedTime,

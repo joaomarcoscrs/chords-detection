@@ -1,9 +1,7 @@
-.win {
-  border-color: green;
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.2s;
 }
-.tie {
-  border-color: yellow;
-}
-.unknown {
-  border-color: orange;
+
+.fade-enter, .fade-leave-to {
+  opacity: 0;
 }

@@ -27,6 +27,7 @@
     <div
       class="max-w-sm rounded-lg overflow-hidden shadow-lg mx-auto bg-gray-800 mt-4"
     >
+      <audio ref="bleepSoundElement" src="sounds/bleep.mp3"></audio>
       <audio ref="clickSoundElement" src="sounds/metronome-click.mp3"></audio>
       <video ref="videoElement" class="player flex" autoplay></video>
       <div class="p-6 flex">
@@ -60,6 +61,12 @@
     </div>
     <canvas ref="canvasElement" class="hidden"></canvas>
     <canvas ref="timelineElement"></canvas>
+    <div
+      v-if="count > 0 && count < 4"
+      class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-purple-500 text-white font-bold text-6xl rounded-full w-32 h-32 flex justify-center items-center"
+    >
+      {{ count }}
+    </div>
 
     <script src="https://cdn.roboflow.com/0.2.26/roboflow.js"></script>
     <script src="./computer-vision.js"></script>
