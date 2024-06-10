@@ -1,12 +1,12 @@
-# rock paper scissors
+# chords detector
 
-Project using roboflow to detect hand shapes.
+Project using roboflow to detect the chords being played in a guitar.
 
 ## Demo
 
 It is a frontend only project, available in [Cloudflare Pages](https://roboflow-test.pages.dev/).
 
-You click play to detect your hand in camera.
+You select a BPM and click on the start button. The app will film you and detect the chords you are playing and display them on the screen.
 
 ## How to run local
 

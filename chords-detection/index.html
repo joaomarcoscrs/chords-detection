@@ -1,0 +1,78 @@
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>rock paper scissor</title>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="./style.css" rel="stylesheet" />
+  </head>
+  <body id="app">
+    <nav class="sticky top-0 bg-gray-100">
+      <h1
+        class="m-2 text-4xl font-extrabold leading-none tracking-tight text-gray-900"
+      >
+        <span class="flex inline">
+          <img src="images/favicon.png" width="32" class="m-2" />
+          chords detector
+        </span>
+      </h1>
+    </nav>
+    <div class="max-w-sm rounded overflow-hidden shadow-lg mx-auto">
+      <video ref="videoElement" class="player flex" autoplay></video>
+      <div class="px-2 py-2 flex">
+        <button
+          @click="play()"
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded w-full"
+        >
+          PLAY
+        </button>
+        <button
+          :disabled="!timelineCanvas"
+          @click="handleDetectClick()"
+          class="font-thin px-8 rounded-full transition-colors duration-300 text-white bg-gradient-to-r shadow-md"
+          :class="{
+            'from-red-500 to-red-700 hover:from-red-700 hover:to-red-900': timerInterval,
+            'from-purple-500 to-purple-700 hover:from-purple-700 hover:to-purple-900': !timerInterval,
+            'disabled:bg-slate-50 cursor-not-allowed': !timelineCanvas
+          }"
+        >
+          {{ timerInterval ? 'stop' : 'start' }}
+        </button>
+      </div>
+    </div>
+    <div
+      v-for="result in results"
+      class="max-w-sm rounded overflow-hidden shadow-lg mx-auto my-2 border-solid border-b-4"
+      :class="resultClass(result.result, 'me')"
+    >
+      <div class="grid grid-cols-2 gap-4 m-2">
+        <div class="grid grid-cols-1 text-center">
+          <div class="text-xs text-gray-800">{{ result.me }}</div>
+          <div>
+            <img :src="result.snapshot" />
+          </div>
+        </div>
+        <div class="grid grid-cols-1 text-center">
+          <div class="text-xs text-gray-800">{{ result.other }}</div>
+          <div>
+            <img :src="'images/' + result.other.toLowerCase() + '.jpg'" />
+          </div>
+        </div>
+      </div>
+      <div
+        class="pb-2 mx-full text-center uppercase font-medium"
+        @click="debugMessage(result.predictions)"
+      >
+        {{ result.message }}
+      </div>
+    </div>
+    <canvas ref="canvasElement" class="hidden"></canvas>
+    <canvas ref="timelineCanvas"></canvas>
+
+    <script src="https://cdn.roboflow.com/0.2.26/roboflow.js"></script>
+    <script src="./robot.js"></script>
+    <script type="module" src="app.js"></script>
+  </body>
+</html>

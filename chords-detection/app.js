@@ -1,46 +1,5 @@
-const choices = {
-  rock: 'rock',
-  paper: 'paper',
-  scissors: 'scissors',
-}
-const outcomes = {
-  me: "me",
-  other: "other",
-  tie: "tie",
-  unknown: "unknown",
-}
-const winMap = {
-  rock: choices.scissors,
-  scissors: choices.paper,
-  paper: choices.rock,
-}
-
-function randomChoice(choices) {
-  const keys = Object.keys(choices)
-  var index = Math.floor(Math.random() * keys.length)
-  return keys[index]
-}
-
-async function startWebcam(videoElement) {
-  try {
-    videoElement.srcObject = await navigator.mediaDevices.getUserMedia({
-      audio: false,
-      video: {
-        facingMode: 'environment',
-      }
-    });
-  } catch (error) {
-    console.error('Error accessing webcam:', error);
-  }
-}
-
-var snapshot = function(videoElement, canvasElement) {
-  canvasElement.width = videoElement.videoWidth;
-  canvasElement.height = videoElement.videoHeight;
-  var ctx = canvasElement.getContext('2d');
-  ctx.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
-  return canvasElement;
-};
+import { drawTimeline } from './chords-timeline.js';
+import { startWebcam, snapshot } from './webcam.js';
 
 function winner(me, other) {
   if (!choices[me]) {
@@ -77,14 +36,50 @@ function resultMessage(winner) {
   }
 }
 
-const { createApp, computed, ref } = Vue
+const { createApp, ref } = Vue
 
 createApp({
   setup() {
     const results = ref([])
+    const timelineCanvas = ref(null);
+    const timerInterval = ref(null);
+    const elapsedTime = ref(0);
+
+    const bpm = 60; // Beats per minute
+    const interval = 1000 / (bpm / 60); // Interval between each beat in milliseconds
+
+    function handleDetectClick() {
+      if (timerInterval.value) {
+        stopDetection();
+      } else {
+        startDetection();
+      }
+    }
+
+    function startDetection() {
+      if (timerInterval.value) return;
+
+      timerInterval.value = setInterval(() => {
+        elapsedTime.value++;
+        if (!timelineCanvas.value) {
+          console.log('Timeline canvas not ready yet');
+        }
+        drawTimeline(timelineCanvas.value, elapsedTime.value, bpm);
+      }, interval);
+    }
+
+
+    function stopDetection() {
+      if (!timerInterval.value) return;
+
+      clearInterval(timerInterval.value);
+
+      timerInterval.value = null;
+      elapsedTime.value = 0;
+    }
 
     function play() {
-      const {videoElement, canvasElement} = this.$refs
+      const { videoElement, canvasElement } = this.$refs
       const _snapshot = snapshot(videoElement, canvasElement)
 
       detect(_snapshot).then((predictions) => {
@@ -103,12 +98,16 @@ createApp({
     }
 
     return {
-      play,
+      timelineCanvas,
       results,
+      timerInterval,
+      elapsedTime,
+      play,
+      handleDetectClick,
       resultClass,
       resultMessage,
       startWebcam,
-      debugMessage (message) {
+      debugMessage(message) {
         alert(JSON.stringify(message, null, 2))
       },
     }
