@@ -13,6 +13,7 @@ You click at the start button and the app will film you and detect the chords yo
 Run flask app
 
 ```bash
+pip install -r requirements.txt
 ROBOFLOW_API_KEY=<your_key> python app.py
 ```
 
