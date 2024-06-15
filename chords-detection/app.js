@@ -1,5 +1,5 @@
 import { drawTimeline } from './chords-timeline.js';
-import { startWebcam, snapshot } from './webcam.js';
+import { startWebcam, snapshot, snapshotUrl, snapshotB64 } from './webcam.js';
 import { identifyChord } from './chords-recognizer.js';
 import { playElementSound } from './sound.js';
 
@@ -54,13 +54,19 @@ createApp({
         if (!timelineElement.value) return;
         isTimelineEmpty.value = false;
 
-        const predictionsPromise = detect(snapshot(videoElement.value, canvasElement.value));
+        const keypointsPredictionsPromise = detectKeypoints(snapshotB64(videoElement.value, canvasElement.value));
+
+        keypointsPredictionsPromise.then((predictions) => {
+          console.log('debug from http request:', predictions);
+        });
 
         playElementSound(clickSoundElement.value);
 
-        predictionsPromise.then((predictions) => {
-          chords.value.unshift(identifyChord(predictions))
-        });
+        // const predictionsPromise = detect(snapshot(videoElement.value, canvasElement.value));
+
+        // predictionsPromise.then((predictions) => {
+        //   chords.value.unshift(identifyChord(predictions))
+        // });
 
         drawTimeline(timelineElement.value, elapsedTime.value, bpm, chords.value);
       }, interval);

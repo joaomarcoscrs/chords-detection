@@ -1,4 +1,5 @@
 const publishableKey = '%PUBLISHABLE_KEY%'
+const apiKey = '%API_KEY%'
 
 const MODEL = {
   // model: 'guitar-chords-daewp',
@@ -12,9 +13,11 @@ async function roboflowModel(modelConfig = MODEL) {
     .auth({ publishable_key: publishableKey })
     .load(modelConfig);
 
-  return model.configure({
+  model.configure({
     threshold: 0.4,
   });
+
+  return model;
 }
 
 var initialized_models = [
@@ -28,3 +31,27 @@ function detect(imageElement) {
     });
   });
 }
+
+const detectKeypoints = async (imageB64) => {
+  try {
+    const response = await fetch("http://127.0.0.1:1234/predict", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        image_base_64: imageB64,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch keypoints');
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error('Error detecting keypoints:', error);
+    throw error; // Propagate the error further
+  }
+};
+
