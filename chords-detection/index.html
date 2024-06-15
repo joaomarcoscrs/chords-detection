@@ -53,11 +53,17 @@
     </div>
     <canvas ref="canvasElement" class="hidden"></canvas>
     <canvas ref="timelineElement"></canvas>
+
+    <!-- Overlay and Counter -->
     <div
       v-if="count > 0 && count < 4"
-      class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-purple-500 text-white font-bold text-6xl rounded-full w-32 h-32 flex justify-center items-center"
+      class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50"
     >
-      {{ count }}
+      <span
+        class="bg-gradient-to-r from-purple-500 to-purple-700 text-white font-thin text-8xl rounded-full w-32 h-32 flex justify-center items-center shadow-lg"
+      >
+        {{ count }}
+      </span>
     </div>
 
     <script src="https://cdn.roboflow.com/0.2.26/roboflow.js"></script>
