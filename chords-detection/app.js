@@ -1,7 +1,8 @@
 import { drawTimeline } from './chords-timeline.js';
-import { startWebcam, snapshot, snapshotUrl, snapshotB64 } from './webcam.js';
+import { startWebcam, snapshot, snapshotB64 } from './webcam.js';
 import { identifyChord } from './chords-recognizer.js';
 import { playElementSound } from './sound.js';
+import { drawPredictions } from './utils/predictions.js';
 
 const { createApp, ref, onMounted } = Vue;
 
@@ -57,6 +58,7 @@ createApp({
         const predictionsPromise = getPredictions(snapshotB64(videoElement.value, canvasElement.value));
 
         predictionsPromise.then((predictions) => {
+          drawPredictions(canvasElement.value, predictions.predictions);
           chords.value.unshift(identifyChord(predictions.predictions));
         });
 

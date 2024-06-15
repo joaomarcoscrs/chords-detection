@@ -95,23 +95,14 @@ export const identifyChord = (predictions) => {
   const guitarNeckPrediction = getClassPrediction(predictions, 'guitar-neck');
   const stringsPrediction = getClassPrediction(predictions, 'strings');
 
-  console.log('debug: handPrediction', handPrediction)
-  console.log('debug: guitarNeckPrediction', guitarNeckPrediction)
-  console.log('debug: stringsPrediction', stringsPrediction)
-
   if (!handPrediction || !guitarNeckPrediction || !stringsPrediction) {
     return null;
   }
 
   const handInfo = buildHandInfo(handPrediction.keypoints);
-  console.log('handInfo', handInfo)
-
   const fretboardInfo = buildFretboardInfo(guitarNeckPrediction.keypoints, stringsPrediction.keypoints);
-  console.log('fretboardInfo', fretboardInfo)
 
   const notes = notesBeingPlayed(fretboardInfo, handInfo);
-
-  console.log('notes', notes)
 
   return chordFromNotes(notes)
 }

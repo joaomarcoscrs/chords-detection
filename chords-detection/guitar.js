@@ -38,6 +38,8 @@ function buildStringsMapping(stringsKeypoints) {
       stringInfo.angle = Math.atan2(stringInfo.end.y - stringInfo.start.y, stringInfo.end.x - stringInfo.start.x);
     }
 
+    mapping[stringIndex] = stringInfo;
+
     return mapping;
   }, {});
 }
@@ -99,6 +101,8 @@ function findString(fretboardInfo, x, y) {
   for (let stringIndex = 0; stringIndex < Object.keys(strings).length - 1; stringIndex++) {
     const string = strings[stringIndex];
     const nextString = strings[stringIndex + 1];
+
+    if (!string || !nextString) continue;
 
     if (isBetweenStrings(string, nextString, x, y)) {
       return closestString(string, nextString, x, y);

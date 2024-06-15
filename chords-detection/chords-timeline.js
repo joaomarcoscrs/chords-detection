@@ -1,6 +1,7 @@
 const LINE_COLOR = '#FFFFFF';
 const LINE_WIDTH = 0.5;
 
+
 function canvasInfo(canvasRef) {
   return {
     canvas: canvasRef,
@@ -35,7 +36,7 @@ function drawChordBackgroundShape(ctx, x, y) {
   ctx.arc(x, y, circleRadius, 0, Math.PI * 2); // Draw a circle
   ctx.closePath();
 
-  ctx.shadowColor = LINE_SHADOW_COLOR;
+  ctx.shadowColor = '#B54AD564';
   ctx.shadowBlur = 4;
   ctx.shadowOffsetX = 2;
   ctx.shadowOffsetY = 2;

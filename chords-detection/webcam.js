@@ -19,15 +19,6 @@ export function snapshot(videoElement, canvasElement) {
   return canvasElement;
 };
 
-export function snapshotUrl(videoElement, canvasElement) {
-  const dataURL = snapshot(videoElement, canvasElement).toDataURL();
-
-  // Convert the data URL to a Blob
-  const blob = dataURLtoBlob(dataURL);
-
-  return URL.createObjectURL(blob);
-}
-
 export function snapshotB64(videoElement, canvasElement) {
   const dataURL = snapshot(videoElement, canvasElement).toDataURL();
 
@@ -36,20 +27,4 @@ export function snapshotB64(videoElement, canvasElement) {
 
   // Return the Base64 encoded image data
   return base64Data;
-}
-
-
-
-function dataURLtoBlob(dataURL) {
-  const parts = dataURL.split(';base64,');
-  const contentType = parts[0].split(':')[1];
-  const raw = window.atob(parts[1]);
-  const rawLength = raw.length;
-  const uInt8Array = new Uint8Array(rawLength);
-
-  for (let i = 0; i < rawLength; ++i) {
-    uInt8Array[i] = raw.charCodeAt(i);
-  }
-
-  return new Blob([uInt8Array], { type: contentType });
 }
