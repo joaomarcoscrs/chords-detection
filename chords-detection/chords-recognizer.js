@@ -91,11 +91,15 @@ function chordFromNotes(notes) {
 
 
 export const identifyChord = (predictions) => {
-  console.log('predictions', predictions)
+  console.log('debug: predictions', predictions)
 
   const handPrediction = getClassPrediction(predictions, 'hand');
   const guitarNeckPrediction = getClassPrediction(predictions, 'guitar-neck');
   const stringsPrediction = getClassPrediction(predictions, 'strings');
+
+  console.log('debug: handPrediction', handPrediction)
+  console.log('debug: guitarNeckPrediction', guitarNeckPrediction)
+  console.log('debug: stringsPrediction', stringsPrediction)
 
   if (!handPrediction || !guitarNeckPrediction || !stringsPrediction) {
     return null;
