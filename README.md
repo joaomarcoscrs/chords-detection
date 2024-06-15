@@ -10,5 +10,15 @@ You click at the start button and the app will film you and detect the chords yo
 
 ## run
 
-ROBOFLOW_API_KEY=<your_key>
-ROBOFLOW_PUBLISHABLE_KEY=<your_key> ./run.sh
+Run flask app
+
+```bash
+ROBOFLOW_API_KEY=<your_key> python app.py
+```
+
+Run frontend
+
+```bash
+./run.sh
+```
+
