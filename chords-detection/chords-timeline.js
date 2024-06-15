@@ -1,3 +1,5 @@
+const LINE_SHADOW = '#AE4EF399';
+
 function canvasInfo(canvasRef) {
   return {
     canvas: canvasRef,
@@ -7,10 +9,17 @@ function canvasInfo(canvasRef) {
 
 function drawTick(ctx, x, y) {
   ctx.strokeStyle = '#FFFFFF';
+  ctx.shadowColor = LINE_SHADOW;
+  ctx.shadowBlur = 10;
+  ctx.shadowOffsetX = 4;
+  ctx.shadowOffsetY = 0;
+
   ctx.beginPath();
   ctx.moveTo(x, y - 10);
   ctx.lineTo(x, y + 10);
   ctx.stroke();
+
+  ctx.shadowColor = 'transparent'; // Reset shadow
 }
 
 function chordGradient(ctx, x, y) {
@@ -25,15 +34,17 @@ function drawChordBackgroundShape(ctx, x, y) {
   const circleRadius = 20;
 
   ctx.beginPath();
-  ctx.arc(x, y, circleRadius, 0, Math.PI * 2); // Desenha um círculo
+  ctx.arc(x, y, circleRadius, 0, Math.PI * 2); // Draw a circle
   ctx.closePath();
 
-  ctx.shadowColor = '#00000033';
-  ctx.shadowBlur = 2;
-  ctx.shadowOffsetX = 1;
-  ctx.shadowOffsetY = 1;
+  ctx.shadowColor = LINE_SHADOW;
+  ctx.shadowBlur = 4;
+  ctx.shadowOffsetX = 2;
+  ctx.shadowOffsetY = 2;
 
   ctx.fill();
+
+  ctx.shadowColor = 'transparent'; // Reset shadow
 }
 
 function drawChordText(ctx, chord, x, y) {
@@ -53,7 +64,7 @@ function drawChordText(ctx, chord, x, y) {
 function drawChord(ctx, chord, x, y) {
   const gradient = chordGradient(ctx, x, y);
 
-  // Define o gradiente como a cor de preenchimento
+  // Set the gradient as the fill color
   ctx.fillStyle = gradient;
 
   drawChordBackgroundShape(ctx, x, y);
@@ -62,10 +73,17 @@ function drawChord(ctx, chord, x, y) {
 
 function drawHorizontalLine(ctx, y) {
   ctx.strokeStyle = '#FFFFFF';
+  ctx.shadowColor = LINE_SHADOW;
+  ctx.shadowBlur = 10;
+  ctx.shadowOffsetX = 0;
+  ctx.shadowOffsetY = 4;
+
   ctx.beginPath();
   ctx.moveTo(0, y);
   ctx.lineTo(ctx.canvas.width, y);
   ctx.stroke();
+
+  ctx.shadowColor = 'transparent'; // Reset shadow
 }
 
 export function drawTimeline(canvasRef, elapsedTime, bpm, chords) {
