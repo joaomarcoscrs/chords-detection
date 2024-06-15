@@ -32,7 +32,7 @@ function detect(imageElement) {
   });
 }
 
-const detectKeypoints = async (imageB64) => {
+const getPredictions = async (imageB64) => {
   try {
     const response = await fetch("http://127.0.0.1:1234/predict", {
       method: "POST",

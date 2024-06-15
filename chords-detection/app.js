@@ -54,19 +54,13 @@ createApp({
         if (!timelineElement.value) return;
         isTimelineEmpty.value = false;
 
-        const keypointsPredictionsPromise = detectKeypoints(snapshotB64(videoElement.value, canvasElement.value));
+        const predictionsPromise = getPredictions(snapshotB64(videoElement.value, canvasElement.value));
 
-        keypointsPredictionsPromise.then((predictions) => {
-          console.log('debug from http request:', predictions);
+        predictionsPromise.then((predictions) => {
+          chords.value.unshift(identifyChord(predictions.predictions));
         });
 
         playElementSound(clickSoundElement.value);
-
-        // const predictionsPromise = detect(snapshot(videoElement.value, canvasElement.value));
-
-        // predictionsPromise.then((predictions) => {
-        //   chords.value.unshift(identifyChord(predictions))
-        // });
 
         drawTimeline(timelineElement.value, elapsedTime.value, bpm, chords.value);
       }, interval);

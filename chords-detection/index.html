@@ -40,13 +40,14 @@
           @click="handleDetectClick()"
           class="rounded-full transition-colors duration-300 text-white bg-gradient-to-r shadow-md btn-outline w-8 h-8 flex justify-center items-center"
           :class="{
-            'from-red-500 to-red-700 hover:from-red-700 hover:to-red-900': timerInterval && count < 1,
-            'from-purple-500 to-purple-700 hover:from-purple-700 hover:to-purple-900': !(timerInterval && count < 1),
+            'from-red-500 to-red-700 hover:from-red-700 hover:to-red-900': timerInterval && !(count > 0 && count < 4),
+            'from-purple-500 to-purple-700 hover:from-purple-700 hover:to-purple-900': !(timerInterval && !(count > 0 && count < 4)),
             'disabled:bg-slate-50 cursor-not-allowed': !timelineElement
           }"
         >
           <span class="material-icons text-2xl p-0 m-0"
-            >{{ timerInterval && count < 1 ? 'stop' : 'play_arrow' }}</span
+            >{{ timerInterval && !(count > 0 && count < 4) ? 'stop' :
+            'play_arrow' }}</span
           >
         </button>
       </div>

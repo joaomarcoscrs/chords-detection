@@ -91,8 +91,6 @@ function chordFromNotes(notes) {
 
 
 export const identifyChord = (predictions) => {
-  console.log('debug: predictions', predictions)
-
   const handPrediction = getClassPrediction(predictions, 'hand');
   const guitarNeckPrediction = getClassPrediction(predictions, 'guitar-neck');
   const stringsPrediction = getClassPrediction(predictions, 'strings');
@@ -112,6 +110,8 @@ export const identifyChord = (predictions) => {
   console.log('fretboardInfo', fretboardInfo)
 
   const notes = notesBeingPlayed(fretboardInfo, handInfo);
+
+  console.log('notes', notes)
 
   return chordFromNotes(notes)
 }
