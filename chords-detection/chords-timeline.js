@@ -1,4 +1,3 @@
-const LINE_SHADOW = '#AE4EF399';
 const LINE_COLOR = '#FFFFFF';
 const LINE_WIDTH = 0.5;
 
@@ -12,10 +11,6 @@ function canvasInfo(canvasRef) {
 function drawTick(ctx, x, y) {
   ctx.strokeStyle = LINE_COLOR;
   ctx.lineWidth = LINE_WIDTH;
-  ctx.shadowColor = LINE_SHADOW;
-  ctx.shadowBlur = 10;
-  ctx.shadowOffsetX = 4;
-  ctx.shadowOffsetY = 0;
 
   ctx.beginPath();
   ctx.moveTo(x, y - 10);
@@ -40,7 +35,7 @@ function drawChordBackgroundShape(ctx, x, y) {
   ctx.arc(x, y, circleRadius, 0, Math.PI * 2); // Draw a circle
   ctx.closePath();
 
-  ctx.shadowColor = LINE_SHADOW;
+  ctx.shadowColor = LINE_SHADOW_COLOR;
   ctx.shadowBlur = 4;
   ctx.shadowOffsetX = 2;
   ctx.shadowOffsetY = 2;
@@ -77,10 +72,6 @@ function drawChord(ctx, chord, x, y) {
 function drawHorizontalLine(ctx, y) {
   ctx.strokeStyle = LINE_COLOR;
   ctx.lineWidth = LINE_WIDTH;
-  ctx.shadowColor = LINE_SHADOW;
-  ctx.shadowBlur = 10;
-  ctx.shadowOffsetX = 0;
-  ctx.shadowOffsetY = 4;
 
   ctx.beginPath();
   ctx.moveTo(0, y);
