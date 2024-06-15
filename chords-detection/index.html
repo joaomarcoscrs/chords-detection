@@ -1,8 +1,9 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>chords detector</title>
+    <title>which chords</title>
 
     <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -12,50 +13,41 @@
     />
     <link href="./style.css" rel="stylesheet" />
   </head>
-  <body id="app" class="bg-gray-700 -mt-2">
+  <body
+    id="app"
+    class="bg-gradient-to-br from-gray-950 via-gray-850 to-gray-900 h-screen"
+  >
     <nav
       class="sticky mb-2 pt-2.5 pb-0.5 bg-gradient-to-r from-gray-900 to-gray-800 text-white"
     >
       <h1 class="m-2 text-4xl font-thin">
         <span class="flex inline">
           <img src="images/favicon.png" width="32" class="m-2" />
-          <span>chords detector</span>
+          <span>which chords</span>
         </span>
       </h1>
     </nav>
 
     <div
-      class="max-w-sm rounded-lg overflow-hidden shadow-lg mx-auto bg-gray-800 mt-4"
+      class="max-w-md rounded-lg overflow-hidden shadow-lg mx-auto bg-gray-800 mt-4"
     >
       <audio ref="bleepSoundElement" src="sounds/bleep.mp3"></audio>
       <audio ref="clickSoundElement" src="sounds/metronome-click.mp3"></audio>
       <video ref="videoElement" class="player flex" autoplay></video>
-      <div class="p-6 flex">
-        <button
-          @click="play()"
-          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded w-full"
-        >
-          PLAY
-        </button>
+      <div class="p-3 flex">
         <button
           :disabled="!timelineElement"
           @click="handleDetectClick()"
-          class="font-thin pl-3 pr-4 rounded-full transition-colors duration-300 text-white bg-gradient-to-r shadow-md"
+          class="rounded-full transition-colors duration-300 text-white bg-gradient-to-r shadow-md btn-outline w-8 h-8 flex justify-center items-center"
           :class="{
             'from-red-500 to-red-700 hover:from-red-700 hover:to-red-900': timerInterval,
             'from-purple-500 to-purple-700 hover:from-purple-700 hover:to-purple-900': !timerInterval,
             'disabled:bg-slate-50 cursor-not-allowed': !timelineElement
           }"
         >
-          <div class="flex w-full justify-center items-center">
-            <span class="material-icons text-base mr-1"
-              >{{ timerInterval ? 'stop' : 'play_arrow' }}</span
-            >
-            <span class="mb-0.5"
-              >{{ timerInterval ? 'stop' : `${isTimelineEmpty ? '' : 're'}start`
-              }}</span
-            >
-          </div>
+          <span class="material-icons text-2xl p-0 m-0"
+            >{{ timerInterval ? 'stop' : 'play_arrow' }}</span
+          >
         </button>
       </div>
     </div>
